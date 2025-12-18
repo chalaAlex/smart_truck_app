@@ -1,0 +1,16 @@
+# flutter_native_splash:
+#   # Light theme
+#   color: "#ffffff"
+#   # image: assets/images/splash_light.png
+#   android: true
+#   ios: true
+
+#   # Dark mode
+#   dark:
+#     color: "#000000"
+#     # image: assets/images/splash_dark.png
+
+#   # Android 12+ splash screen API
+#   android_12:
+#     # image: assets/images/splash_light.png
+#     background_color: "#ffffff"

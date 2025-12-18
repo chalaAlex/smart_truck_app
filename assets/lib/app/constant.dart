@@ -1,0 +1,20 @@
+// import 'package:shared_preferences/shared_preferences.dart';
+
+// class Constant {
+//   static const String baseUrl = "https://easy-logistics-api.onrender.com";
+//   static String token = ""; 
+
+//   // Method to set the token and save it in SharedPreferences
+//   static Future<void> setToken(String newToken) async {
+//     token = newToken;
+    
+//     SharedPreferences prefs = await SharedPreferences.getInstance();
+//     await prefs.setString('token', newToken);  
+//   }
+
+//   static Future<void> loadToken() async {
+//     SharedPreferences prefs = await SharedPreferences.getInstance();
+//     token = prefs.getString('token') ?? '';  // Load the token
+//   }
+// }
+
