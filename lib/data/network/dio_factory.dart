@@ -10,8 +10,8 @@ const String ACCEPT = "accept";
 const String AUTHORIZATION = "authorization";
 const String DEFAULT_LANGUAGE = "language";
 
-class DioFactory {
-  DioFactory(this._appPreferences);
+class DioFactoryMethod {
+  DioFactoryMethod(this._appPreferences);
 
   AppPreferences _appPreferences;
 

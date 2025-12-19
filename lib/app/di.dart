@@ -6,7 +6,7 @@ import 'package:smart_truck_app/app/app_preferences.dart';
 import 'package:smart_truck_app/data/data_source/local_data_source.dart';
 import 'package:smart_truck_app/data/data_source/remote_data_source.dart';
 import 'package:smart_truck_app/data/network/app_api.dart';
-import 'package:smart_truck_app/data/network/dio_factory,dart';
+import 'package:smart_truck_app/data/network/dio_factory.dart';
 import 'package:smart_truck_app/data/network/network_info.dart';
 import 'package:smart_truck_app/data/repository/repository_implementor.dart';
 import 'package:smart_truck_app/domain/repository/repository.dart';
@@ -31,10 +31,10 @@ Future<void> initAppModule() async {
   );
 
   // dio factory
-  instance.registerLazySingleton<DioFactory>(() => DioFactory(instance()));
+  instance.registerLazySingleton<DioFactoryMethod>(() => DioFactoryMethod(instance()));
 
     // app service client
-  final dio = await instance<DioFactory>().getDio();
+  final dio = await instance<DioFactoryMethod>().getDio();
   instance.registerLazySingleton<AppServiceClient>(() => AppServiceClient(dio));
 
   // remote data source

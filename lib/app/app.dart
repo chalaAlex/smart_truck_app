@@ -5,10 +5,11 @@ import 'package:smart_truck_app/app/di.dart';
 import 'package:smart_truck_app/presentation/utils/theme.dart';
 
 class MyApp extends StatefulWidget {
-  factory MyApp() => instance; //factory for the class instance
-  MyApp._internal(); //private named constructor
-  static final MyApp instance =
-      MyApp._internal(); //single instance -- singleton
+  // factory MyApp() => instance; //factory for the class instance
+  // MyApp._internal(); //private named constructor
+  
+  // static final MyApp instance =
+  //     MyApp._internal(); //single instance -- singleton
 
   int appState = 0;
 

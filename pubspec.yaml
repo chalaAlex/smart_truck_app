@@ -1,6 +1,6 @@
 name: smart_truck_app
 description: "A new Flutter project."
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 version: 1.0.0+1
 
@@ -17,7 +17,7 @@ dependencies:
   dartz: ^0.10.1
   http: ^1.2.2
   internet_connection_checker: ^3.0.1
-  flutter_local_notifications: ^18.0.1
+  # flutter_local_notifications: ^18.0.1
   get_it: ^9.2.0
   easy_localization: ^3.0.7
   retrofit: ^4.2.0
@@ -54,23 +54,32 @@ dependencies:
   connectivity_plus: ^6.1.5
   build_runner: ^2.4.13
 
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
   flutter_native_splash: ^2.4.7
 
+
+# ========================
+# SPLASH SCREEN CONFIGURATION
+# ========================
 flutter_native_splash:
-  color: "#42a5f5"
+  android: true
+  ios: true
+  # image: assets/images/default.png
+  color: "#000000"
+
+  android_12:
+    color: "#E8F5E9 "
+    image: assets/images/default.png
 
 flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpegcha@cha-HP-Pavilion-Notebook:~/Desktop/smart_truck_app$ dart run flutter_native_splash:c
+  assets:
+    - assets/images/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

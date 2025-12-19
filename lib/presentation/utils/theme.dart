@@ -14,7 +14,6 @@ class TAppTheme {
     primaryColor: AppColors.primaryLight,
     scaffoldBackgroundColor: AppColors.backgroundLight,
     textTheme: TTextTheme.lightTextTheme,
-    
   );
 
   // Dark theme

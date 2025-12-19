@@ -2,7 +2,7 @@
 // import 'package:smart_truck_app/app/app.dart';
 
 // void main() async {
-  // WidgetsFlutterBinding.ensureInitialized();
+//   WidgetsFlutterBinding.ensureInitialized();
 //   // await initAppModule();
 //   runApp(
 //       // EasyLocalization(
