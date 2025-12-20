@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_truck_app/app/app_preferences.dart';
 import 'package:smart_truck_app/app/di.dart';
+import 'package:smart_truck_app/presentation/pages/onboarding/role_selection.dart';
+import 'package:smart_truck_app/presentation/resources/route_manager.dart';
 import 'package:smart_truck_app/presentation/utils/theme.dart';
 
 class MyApp extends StatefulWidget {
-  // factory MyApp() => instance; //factory for the class instance
-  // MyApp._internal(); //private named constructor
+  factory MyApp() => instance; //factory for the class instance
+  MyApp._internal(); //private named constructor
   
-  // static final MyApp instance =
-  //     MyApp._internal(); //single instance -- singleton
+  static final MyApp instance =
+      MyApp._internal(); //single instance -- singleton
 
   int appState = 0;
 
@@ -40,17 +42,18 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        // BlocProvider<CategoriesBloc>(
-        //   create: (context) => instance<CategoriesBloc>(),
-        // ),
-      ],
-      child: MaterialApp(
+    return 
+    // MultiBlocProvider(
+    //   providers: [
+    //     // BlocProvider<CategoriesBloc>(
+    //     //   create: (context) => instance<CategoriesBloc>(),
+    //     // ),
+    //   ],
+       MaterialApp(
+        onGenerateRoute: RouteGenerator.getRoute,
         debugShowCheckedModeBanner: false,
         theme: TAppTheme.lightTheme,
-        home: const Scaffold(body: Placeholder()),
-      ),
-    );
+        home: RoleSelectionScreen(),
+      );
   }
 }
