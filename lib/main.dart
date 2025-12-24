@@ -1,11 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:smart_truck_app/core/app/app.dart';
+import 'package:smart_truck_app/features/registration/presentation/controller/registration_draft_notifier.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(MyApp());
+  // ChangeNotifierProvider(
+  // create: (_) => RegistrationDraftNotifier(),
+  // child: MyApp(),
+  // );
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => RegistrationDraftNotifier(),
+      child: MyApp(),
+    ),
+  );
 }
 
+// MyApp()
 // import 'package:flutter/material.dart';
 
 // void main() {

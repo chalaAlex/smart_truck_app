@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ReviewPage extends StatelessWidget {
-  final String name;
-  const ReviewPage({super.key, required this.name});
+  const ReviewPage();
 
   @override
   Widget build(BuildContext context) {
@@ -10,7 +9,7 @@ class ReviewPage extends StatelessWidget {
       body: Column(
         children: [
           Center(child: Text(
-            name,
+            "name",
             style: TextStyle(
               fontSize: 30,
             ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smart_truck_app/features/registration/presentation/pages/fo_complete_profile/fo_complete_profile.dart';
 import 'package:smart_truck_app/features/registration/presentation/pages/fo_home_page/fo_home_page.dart';
-import 'package:smart_truck_app/features/registration/presentation/pages/to_complete_profile/add_vehicle.dart';
+import 'package:smart_truck_app/features/registration/presentation/pages/to_complete_profile/vehicle_info_screen.dart';
 import 'package:smart_truck_app/features/registration/presentation/pages/to_complete_profile/document_upload.dart';
 import 'package:smart_truck_app/features/registration/presentation/pages/to_complete_profile/driver_detail.dart';
 import 'package:smart_truck_app/features/registration/presentation/pages/to_complete_profile/review_page.dart';
@@ -13,7 +13,7 @@ class Routes {
   static const String toCompleteProfile = "/toCompleteProfile";
   static const String toHomePage = "/toHomePage";
   static const String foHomePage = "/foHomePage";
-  static const String vehicleInformationScreen = "/addVehicle";
+  static const String vehicleInformationScreen = "/vehicleInformationScreen";
   static const String verificationPending = "/verificationPending";
   static const String documentUploadScreen = "/documentUploadScreen";
   static const String reviewPage = "/reviewPage";
@@ -38,7 +38,7 @@ class RouteGenerator {
 
       case Routes.vehicleInformationScreen:
         return MaterialPageRoute(
-          builder: (_) => const VehicleInformationScreen(name: '',),
+          builder: (_) => const VehicleInformationScreen(),
         );
 
       case Routes.verificationPending:
@@ -48,7 +48,7 @@ class RouteGenerator {
       //   return MaterialPageRoute(builder: (_) => const DocumentUploadScreen());
 
       case Routes.reviewPage:
-        return MaterialPageRoute(builder: (_) => const ReviewPage(name: '',));
+        return MaterialPageRoute(builder: (_) => const ReviewPage());
 
       default:
         return MaterialPageRoute(

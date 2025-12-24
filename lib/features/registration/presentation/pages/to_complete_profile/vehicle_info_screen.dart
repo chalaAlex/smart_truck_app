@@ -1,22 +1,23 @@
-// 
-
+//
 
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:smart_truck_app/core/resources/route_manager.dart';
+import 'package:provider/provider.dart';
+import 'package:smart_truck_app/features/registration/domain/entity/user_draft.dart';
+import 'package:smart_truck_app/features/registration/presentation/controller/registration_draft_notifier.dart';
 import 'package:smart_truck_app/features/registration/presentation/pages/to_complete_profile/document_upload.dart';
 
 class VehicleInformationScreen extends StatefulWidget {
-  const VehicleInformationScreen({super.key, required this.name});
-  final String name;
+  const VehicleInformationScreen();
 
   @override
-  State<VehicleInformationScreen> createState() => _VehicleInformationScreenState();
+  State<VehicleInformationScreen> createState() =>
+      _VehicleInformationScreenState();
 }
 
 class _VehicleInformationScreenState extends State<VehicleInformationScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
-  
+
   // Text editing controllers
   TextEditingController vehicleTypeController = TextEditingController();
   TextEditingController makeController = TextEditingController();
@@ -27,6 +28,7 @@ class _VehicleInformationScreenState extends State<VehicleInformationScreen> {
 
   // Dropdown value
   String? _selectedVehicleType;
+  UserDraft _userDraft = UserDraft();
 
   // Vehicle type options
   final List<String> _vehicleTypes = [
@@ -35,12 +37,49 @@ class _VehicleInformationScreenState extends State<VehicleInformationScreen> {
     'SUV',
     'Pickup',
     'Sedan',
-    'Motorcycle'
+    'Motorcycle',
   ];
 
-  void _submit() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => DocumentUploadScreen(name: widget.name,)));
+  void _submit(RegistrationDraftNotifier notifier) {
+    final hello =  int.parse(licensePlateController.text);
+    try {
+
+      final licensePlateNumber = int.parse(licensePlateController.text);
+      final experience = int.parse(yearController.text);
+      final capacity = double.parse(capacityController.text);
+    print("hello world ${hello.runtimeType}");
+
+
+      print("${licensePlateNumber.runtimeType} ??????????????");
+
+      final success = notifier.saveVehicleInfo(
+        vehicleType: vehicleTypeController.text,
+        make: makeController.text,
+        model: modelController.text,
+        licensePlateNumber: licensePlateNumber,
+        year: experience,
+        capacity: capacity,
+      );
+      if (!success) {
+        return;
+      }
+    } catch (e) {
+      print("Error parsing number: ${e.toString()}");
+      return;
+    }
+
+    // print("??????? $success");
+
+    // If noting filled by user, do not proceed
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => DocumentUploadScreen()),
+    );
     final formState = _formKey.currentState;
+    if (makeController.text.isEmpty) {
+      print("make mode is empty");
+    }
     if (formState!.validate()) {
       print("Vehicle Type: $_selectedVehicleType");
       print("Make: ${makeController.text}");
@@ -56,6 +95,9 @@ class _VehicleInformationScreenState extends State<VehicleInformationScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+
+    // Provider instance.
+    final notifier = context.read<RegistrationDraftNotifier>();
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -99,10 +141,7 @@ class _VehicleInformationScreenState extends State<VehicleInformationScreen> {
 
               const Text(
                 "Please enter the details of the vehicle you will be using for deliveries.",
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey,
-                ),
+                style: TextStyle(fontSize: 14, color: Colors.grey),
               ),
 
               const SizedBox(height: 32),
@@ -123,7 +162,8 @@ class _VehicleInformationScreenState extends State<VehicleInformationScreen> {
                   FormBuilderDropdown<String>(
                     name: 'vehicle_type',
                     decoration: InputDecoration(
-                      hintText: "Select type (e.g., Truck, Van)",
+                      hintText:
+                          "Select type (e.g., Truck, Van ${notifier.draft.firstName})",
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                         borderSide: BorderSide(color: Colors.grey[300]!),
@@ -134,7 +174,10 @@ class _VehicleInformationScreenState extends State<VehicleInformationScreen> {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
-                        borderSide: const BorderSide(color: Colors.blue, width: 2),
+                        borderSide: const BorderSide(
+                          color: Colors.blue,
+                          width: 2,
+                        ),
                       ),
                       filled: true,
                       fillColor: Colors.grey[50],
@@ -142,13 +185,16 @@ class _VehicleInformationScreenState extends State<VehicleInformationScreen> {
                         horizontal: 16,
                         vertical: 16,
                       ),
-                      suffixIcon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
+                      suffixIcon: const Icon(
+                        Icons.arrow_drop_down,
+                        color: Colors.grey,
+                      ),
                     ),
                     items: _vehicleTypes
-                        .map((type) => DropdownMenuItem(
-                              value: type,
-                              child: Text(type),
-                            ))
+                        .map(
+                          (type) =>
+                              DropdownMenuItem(value: type, child: Text(type)),
+                        )
                         .toList(),
                     onChanged: (value) {
                       setState(() {
@@ -274,7 +320,9 @@ class _VehicleInformationScreenState extends State<VehicleInformationScreen> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                  onPressed: _submit,
+                  onPressed: () {
+                    _submit(notifier);
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
                     shape: RoundedRectangleBorder(
@@ -378,10 +426,7 @@ class _VehicleInformationScreenState extends State<VehicleInformationScreen> {
           decoration: InputDecoration(
             hintText: hintText,
             suffixText: suffixText,
-            suffixStyle: const TextStyle(
-              color: Colors.grey,
-              fontSize: 16,
-            ),
+            suffixStyle: const TextStyle(color: Colors.grey, fontSize: 16),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide(color: Colors.grey[300]!),

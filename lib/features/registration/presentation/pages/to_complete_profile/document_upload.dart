@@ -4,8 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:smart_truck_app/features/registration/presentation/pages/to_complete_profile/review_page.dart';
 
 class DocumentUploadScreen extends StatefulWidget {
-  final String name;
-  const DocumentUploadScreen({super.key, required this.name});
+  const DocumentUploadScreen();
 
   @override
   State<DocumentUploadScreen> createState() => _DocumentUploadScreenState();
@@ -164,7 +163,7 @@ class _DocumentUploadScreenState extends State<DocumentUploadScreen> {
       );
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => ReviewPage(name: widget.name)),
+        MaterialPageRoute(builder: (context) => ReviewPage()),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(

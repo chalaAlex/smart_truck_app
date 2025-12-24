@@ -1,34 +1,9 @@
-// import 'package:flutter/material.dart';
-// import 'package:smart_truck_app/core/resources/route_manager.dart';
-
-// class ToCompleteProfile extends StatelessWidget {
-//   const ToCompleteProfile({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Column(
-//         mainAxisAlignment: MainAxisAlignment.spaceAround,
-//         crossAxisAlignment: CrossAxisAlignment.center,
-//         children: [
-//           Center(child: Text("TO COMPLETE PROFILE")),
-//           ElevatedButton(
-//             onPressed: () {
-//               Navigator.pushNamed(context, Routes.addVehicle);
-//               // TODO: TAKE THE USER TO TO HOMEPAGE SCREEN
-//             },
-//             child: Text("Next"),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:provider/provider.dart';
 import 'package:smart_truck_app/core/resources/route_manager.dart';
-import 'package:smart_truck_app/features/registration/presentation/pages/to_complete_profile/add_vehicle.dart';
+import 'package:smart_truck_app/features/registration/presentation/controller/registration_draft_notifier.dart';
+import 'package:smart_truck_app/features/registration/presentation/pages/to_complete_profile/vehicle_info_screen.dart';
 
 class ToCompleteProfile extends StatefulWidget {
   const ToCompleteProfile({super.key});
@@ -53,16 +28,23 @@ class _ToCompleteProfileState extends State<ToCompleteProfile> {
       debugPrint("Driver Name: ${driverNameController.text}");
       debugPrint("License Number: ${licenseNumberController.text}");
       debugPrint("Years of Experience: ${experienceController.text}");
-
-      // Navigate to next step
-      // Navigator.push(context, MaterialPageRoute(builder: (_) => NextScreen()));
     } else {
       debugPrint("Validation failed");
     }
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    experienceController.text = "0"; // Default value for years of experience
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // Provider instance.
+    final notifier = context.read<RegistrationDraftNotifier>();
+
     return Scaffold(
       backgroundColor: Colors.white, // remove later when theming
       appBar: AppBar(
@@ -116,7 +98,7 @@ class _ToCompleteProfileState extends State<ToCompleteProfile> {
 
               const SizedBox(height: 32),
 
-              _submitButton(),
+              _submitButton(notifier),
 
               const SizedBox(height: 24),
             ],
@@ -160,7 +142,7 @@ class _ToCompleteProfileState extends State<ToCompleteProfile> {
   }
 
   // 🔹 Bottom button
-  Widget _submitButton() {
+  Widget _submitButton(RegistrationDraftNotifier notifier) {
     return SizedBox(
       width: double.infinity,
       height: 50,
@@ -178,14 +160,24 @@ class _ToCompleteProfileState extends State<ToCompleteProfile> {
             Text("Next", style: TextStyle(fontSize: 16)),
             SizedBox(width: 8),
             IconButton(
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      VehicleInformationScreen(name: driverNameController.text),
-                ),
-              ),
               icon: Icon(Icons.arrow_forward),
+              onPressed: () {
+                // Save driver info using notifier
+                final success = notifier.saveDriverInfo(
+                  firstName: driverNameController.text,
+                  licenseNumber: licenseNumberController.text,
+                  yearsOfExperience: int.parse(experienceController.text),
+                );
+
+                print("Driver Info Saved: ${notifier.draft.firstName}");
+
+                // If noting filled by user, do not proceed
+                if (!success) {
+                  return;
+                }
+
+                Navigator.pushNamed(context, Routes.vehicleInformationScreen);
+              },
             ),
           ],
         ),
