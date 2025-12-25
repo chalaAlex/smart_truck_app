@@ -1,37 +1,3 @@
-// import 'dart:io';
-
-// class UserDraft {
-//   // Screen 1
-//   String? firstName;
-//   String? licenseNumber;
-//   int? yearsOfExperience;
-
-//   // Screen 2
-//   String? vehicleType;
-//   String? make;
-//   String? model;
-//   String? licensePlateNumber;
-//   int? year;
-//   double? capacity;
-
-//   // Screen 3
-//   File? vehicleRegistration;
-//   File? driversLicense;
-//   File? insuranceProof;
-
-//   UserDraft({
-//     this.firstName,
-//     this.licenseNumber,
-//     this.yearsOfExperience,
-//     List<File>? photos,
-//     List<File>? documents,
-//     this.vehicleType,
-//     this.licensePlateNumber,
-//     this.capacity,
-//   }) : photos = photos ?? [],
-//        documents = documents ?? [];
-// }
-
 import 'dart:io';
 
 class UserDraft {
@@ -58,4 +24,19 @@ class UserDraft {
   File? vehicleRegistration;
   File? driversLicense;
   File? insuranceProof;
+
+  UserDraft({
+    this.firstName,
+    this.licenseNumber,
+    this.yearsOfExperience = 0,
+    this.vehicleType,
+    this.make,
+    this.model,
+    this.licensePlateNumber,
+    this.year,
+    this.capacity,
+    this.vehicleRegistration,
+    this.driversLicense,
+    this.insuranceProof,
+  });
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as FormBuilderValidators;
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_truck_app/core/resources/route_manager.dart';
@@ -33,12 +34,12 @@ class _ToCompleteProfileState extends State<ToCompleteProfile> {
     }
   }
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    experienceController.text = "0"; // Default value for years of experience
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   experienceController.text = "0"; // Default value for years of experience
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -135,7 +136,7 @@ class _ToCompleteProfileState extends State<ToCompleteProfile> {
             prefixIcon: Icon(icon),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
           ),
-          // validator: FormBuilderValidators.required(),
+          // validator: FormBuilderValidators.email.,
         ),
       ],
     );
@@ -166,7 +167,7 @@ class _ToCompleteProfileState extends State<ToCompleteProfile> {
                 final success = notifier.saveDriverInfo(
                   firstName: driverNameController.text,
                   licenseNumber: licenseNumberController.text,
-                  yearsOfExperience: int.parse(experienceController.text),
+                  yearsOfExperience: int.tryParse(experienceController.text) ?? 0,
                 );
 
                 print("Driver Info Saved: ${notifier.draft.firstName}");

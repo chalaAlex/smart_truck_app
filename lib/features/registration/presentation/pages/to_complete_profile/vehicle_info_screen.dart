@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:smart_truck_app/features/registration/domain/entity/user_draft.dart';
 import 'package:smart_truck_app/features/registration/presentation/controller/registration_draft_notifier.dart';
 import 'package:smart_truck_app/features/registration/presentation/pages/to_complete_profile/document_upload.dart';
+import 'package:logger/logger.dart';
 
 class VehicleInformationScreen extends StatefulWidget {
   const VehicleInformationScreen();
@@ -17,6 +18,7 @@ class VehicleInformationScreen extends StatefulWidget {
 
 class _VehicleInformationScreenState extends State<VehicleInformationScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
+  var logger = Logger(printer: PrettyPrinter());
 
   // Text editing controllers
   TextEditingController vehicleTypeController = TextEditingController();
@@ -41,19 +43,13 @@ class _VehicleInformationScreenState extends State<VehicleInformationScreen> {
   ];
 
   void _submit(RegistrationDraftNotifier notifier) {
-    final hello =  int.parse(licensePlateController.text);
     try {
-
-      final licensePlateNumber = int.parse(licensePlateController.text);
-      final experience = int.parse(yearController.text);
-      final capacity = double.parse(capacityController.text);
-    print("hello world ${hello.runtimeType}");
-
-
-      print("${licensePlateNumber.runtimeType} ??????????????");
+      final licensePlateNumber = int.tryParse(licensePlateController.text) ?? 0;
+      final experience = int.tryParse(yearController.text) ?? 0;
+      final capacity = double.tryParse(capacityController.text) ?? 0.0;
 
       final success = notifier.saveVehicleInfo(
-        vehicleType: vehicleTypeController.text,
+        vehicleType: _selectedVehicleType!,
         make: makeController.text,
         model: modelController.text,
         licensePlateNumber: licensePlateNumber,
@@ -68,28 +64,10 @@ class _VehicleInformationScreenState extends State<VehicleInformationScreen> {
       return;
     }
 
-    // print("??????? $success");
-
-    // If noting filled by user, do not proceed
-
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => DocumentUploadScreen()),
     );
-    final formState = _formKey.currentState;
-    if (makeController.text.isEmpty) {
-      print("make mode is empty");
-    }
-    if (formState!.validate()) {
-      print("Vehicle Type: $_selectedVehicleType");
-      print("Make: ${makeController.text}");
-      print("Model: ${modelController.text}");
-      print("License Plate: ${licensePlateController.text}");
-      print("Year: ${yearController.text}");
-      print("Capacity: ${capacityController.text} tons");
-    } else {
-      debugPrint('Validation failed');
-    }
   }
 
   @override

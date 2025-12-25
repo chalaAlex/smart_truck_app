@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_truck_app/core/app/app_preferences.dart';
 import 'package:smart_truck_app/core/app/di.dart';
 import 'package:smart_truck_app/features/registration/presentation/pages/onboarding/role_selection.dart';
@@ -56,6 +55,7 @@ class _MyAppState extends State<MyApp> {
         theme: TAppTheme.lightTheme,
         // darkTheme: TAppTheme.darkTheme,
         home: RoleSelectionScreen(),
+        // home: ReviewPage(),
       );
   }
 }

@@ -25,8 +25,6 @@ class RegistrationDraftNotifier extends ChangeNotifier {
       _draft.firstName = firstName;
       _draft.licenseNumber = licenseNumber;
       _draft.yearsOfExperience = yearsOfExperience;
-
-      print("Notifier called");
     }
 
     notifyListeners();
@@ -44,13 +42,18 @@ class RegistrationDraftNotifier extends ChangeNotifier {
     required int year,
     required double capacity,
   }) {
-    if (vehicleType.isEmpty ||
-        make.isEmpty ||
-        model.isEmpty ||
-        licensePlateNumber.isNegative ||
-        year < 1900 ||
-        capacity <= 0) {
-      print("Vehicle Info Notifier called with failed");
+    try {
+      if (vehicleType.isEmpty ||
+          make.isEmpty ||
+          model.isEmpty ||
+          licensePlateNumber.isNegative ||
+          year < 1900 ||
+          capacity <= 0) {
+        print("Vehicle Info Notifier called with failed");
+        return false;
+      }
+    } catch (e) {
+      print("Error in Vehicle Info Notifier: $e");
       return false;
     }
 

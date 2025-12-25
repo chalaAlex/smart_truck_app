@@ -1,6 +1,12 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:logger/logger.dart';
+import 'package:provider/provider.dart';
+import 'package:smart_truck_app/core/resources/route_manager.dart';
+import 'package:smart_truck_app/features/registration/domain/entity/user_draft.dart';
+import 'package:smart_truck_app/features/registration/presentation/controller/registration_draft_notifier.dart';
 import 'package:smart_truck_app/features/registration/presentation/pages/to_complete_profile/review_page.dart';
 
 class DocumentUploadScreen extends StatefulWidget {
@@ -12,6 +18,11 @@ class DocumentUploadScreen extends StatefulWidget {
 
 class _DocumentUploadScreenState extends State<DocumentUploadScreen> {
   final ImagePicker _picker = ImagePicker();
+  final _formKey = GlobalKey<FormBuilderState>();
+  var logger = Logger(printer: PrettyPrinter());
+
+  // User draft object to hold uploaded documents
+  UserDraft _userDraft = UserDraft();
 
   // Document states
   File? _vehicleRegistration;
@@ -142,7 +153,7 @@ class _DocumentUploadScreenState extends State<DocumentUploadScreen> {
     return '';
   }
 
-  void _submitDocuments() {
+  void _submitDocuments(RegistrationDraftNotifier notifier) {
     final List<String> missingDocs = [];
 
     if (_vehicleRegistration == null) missingDocs.add('Vehicle Registration');
@@ -155,16 +166,19 @@ class _DocumentUploadScreenState extends State<DocumentUploadScreen> {
       print("Driver's License: ${_driversLicense!.path}");
       print('Insurance Policy: ${_insurancePolicy!.path}');
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Documents submitted successfully!'),
-          backgroundColor: Colors.green,
-        ),
+      final success = notifier.saveDocuments(
+        vehicleRegistration: _vehicleRegistration!,
+        driversLicense: _driversLicense!,
+        insuranceProof: _insurancePolicy!,
       );
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => ReviewPage()),
-      );
+
+      if (!success) {
+        // print("FIle failed: $success");
+        logger.i("FIle failed: $success");
+        return;
+      }
+
+      Navigator.pushNamed(context, Routes.reviewPage);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -177,6 +191,8 @@ class _DocumentUploadScreenState extends State<DocumentUploadScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final notifier = context.read<RegistrationDraftNotifier>();
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -322,7 +338,9 @@ class _DocumentUploadScreenState extends State<DocumentUploadScreen> {
               width: double.infinity,
               height: 50,
               child: ElevatedButton(
-                onPressed: _submitDocuments,
+                onPressed: () {
+                  _submitDocuments(notifier);
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                   shape: RoundedRectangleBorder(
