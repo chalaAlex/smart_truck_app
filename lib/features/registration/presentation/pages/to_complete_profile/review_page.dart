@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_truck_app/core/resources/route_manager.dart';
 import 'package:smart_truck_app/features/registration/presentation/controller/registration_draft_notifier.dart';
 
 class ReviewPage extends StatefulWidget {
@@ -17,33 +17,58 @@ class _ReviewPageState extends State<ReviewPage> {
   Widget build(BuildContext context) {
     // Provider instance.
     final notifier = context.read<RegistrationDraftNotifier>();
-    return SafeArea(
-      child: Scaffold(
-        body: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-            child: Column(
-              children: [
-                Row(children: [screenPageName(), Spacer(), edit()]),
-                driverInfoCard(
-                  fullName: notifier.draft.firstName!,
-                  licenseNumber: notifier.draft.licenseNumber!,
-                  experience: notifier.draft.yearsOfExperience.toString(),
-                  phone: "(555) 123-4567",
-                ),
-                SizedBox(height: 20),
-                truckDetailsCard(
-                  file: notifier.draft.driversLicense,
-                  type: "Box Truck",
-                  makeModel: "Ford F-650",
-                  year: "2022",
-                  licensePlate: "LGT - 9876",
-                  capacity: "26,000 lbs",
-                  color: "White",
-                ),
-              ],
-            ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Padding(
+          padding: const EdgeInsets.fromLTRB(38, 00, 0, 0),
+          child: Text("Review Page", style: TextStyle(fontSize: 25)),
+        ),
+      ),
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          child: Column(
+            children: [
+              sectionHeader(
+                title: 'Your Personal Information',
+                onEdit: () {
+                  // Navigate to edit vehicle info page
+                  Navigator.pushNamed(
+                    context,
+                    Routes.vehicleInformationScreen,
+                  );
+                },
+              ),
+              SizedBox(height: 10),
+              driverInfoCard(
+                fullName: notifier.draft.firstName!,
+                licenseNumber: notifier.draft.licenseNumber!,
+                experience: notifier.draft.yearsOfExperience.toString(),
+                phone: "(555) 123-4567",
+              ),
+              SizedBox(height: 20),
+              sectionHeader(
+                title: 'Your Personal Information',
+                onEdit: () {
+                  // Navigate to edit vehicle info page
+                  Navigator.pushNamed(
+                    context,
+                    Routes.vehicleInformationScreen,
+                  );
+                },
+              ),
+              SizedBox(height: 10),
+              truckDetailsCard(
+                file: notifier.draft.driversLicense,
+                type: "Box Truck",
+                makeModel: "Ford F-650",
+                year: "2022",
+                licensePlate: "LGT - 9876",
+                capacity: "26,000 lbs",
+                color: "White",
+              ),
+            ],
           ),
         ),
       ),
@@ -166,7 +191,9 @@ Widget truckDetailsCard({
               ? Row(
                   children: [
                     Container(
-                      decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(8))),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                      ),
                       padding: EdgeInsets.all(8),
                       child: Image.file(file, height: 120),
                     ),
@@ -329,6 +356,35 @@ Widget _truckColor({required String label, required String color}) {
             style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
           ),
         ],
+      ),
+    ],
+  );
+}
+
+Widget sectionHeader({required String title, required VoidCallback onEdit}) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      Text(
+        title,
+        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+      ),
+      GestureDetector(
+        onTap: onEdit,
+        child: Row(
+          children: const [
+            Icon(Icons.edit, size: 14, color: Color(0xFFC9A04F)),
+            SizedBox(width: 4),
+            Text(
+              "Edit",
+              style: TextStyle(
+                fontSize: 16,
+                color: Color(0xFFC9A04F),
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
       ),
     ],
   );

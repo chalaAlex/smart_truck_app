@@ -22,16 +22,19 @@ class _ToCompleteProfileState extends State<ToCompleteProfile> {
   final TextEditingController experienceController = TextEditingController();
 
   // Submit handler
-  void _submit() {
-    final formState = _formKey.currentState;
+  void _submit(RegistrationDraftNotifier notifier) {
+    final success = notifier.saveDriverInfo(
+      firstName: driverNameController.text,
+      licenseNumber: licenseNumberController.text,
+      yearsOfExperience: int.tryParse(experienceController.text) ?? 0,
+    );
 
-    if (formState!.validate()) {
-      debugPrint("Driver Name: ${driverNameController.text}");
-      debugPrint("License Number: ${licenseNumberController.text}");
-      debugPrint("Years of Experience: ${experienceController.text}");
-    } else {
-      debugPrint("Validation failed");
+    // If noting filled by user, do not proceed
+    if (!success) {
+      return;
     }
+
+    Navigator.pushNamed(context, Routes.vehicleInformationScreen);
   }
 
   // @override
@@ -148,41 +151,62 @@ class _ToCompleteProfileState extends State<ToCompleteProfile> {
       width: double.infinity,
       height: 50,
       child: ElevatedButton(
-        onPressed: _submit,
+        onPressed: () {
+          _submit(notifier);
+        },
         style: ElevatedButton.styleFrom(
-          // backgroundColor: AppColors.kPrimaryBlue,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(24),
-          ),
+          backgroundColor: Colors.blue,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          elevation: 0,
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text("Next", style: TextStyle(fontSize: 16)),
-            SizedBox(width: 8),
-            IconButton(
-              icon: Icon(Icons.arrow_forward),
-              onPressed: () {
-                // Save driver info using notifier
-                final success = notifier.saveDriverInfo(
-                  firstName: driverNameController.text,
-                  licenseNumber: licenseNumberController.text,
-                  yearsOfExperience: int.tryParse(experienceController.text) ?? 0,
-                );
-
-                print("Driver Info Saved: ${notifier.draft.firstName}");
-
-                // If noting filled by user, do not proceed
-                if (!success) {
-                  return;
-                }
-
-                Navigator.pushNamed(context, Routes.vehicleInformationScreen);
-              },
-            ),
-          ],
+        child: const Text(
+          "Next",
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: Colors.white,
+          ),
         ),
       ),
     );
+
+    // return SizedBox(
+    //   width: double.infinity,
+    //   height: 50,
+    //   child: ElevatedButton(
+    //     onPressed: _submit,
+    //     style: ElevatedButton.styleFrom(
+    //       // backgroundColor: AppColors.kPrimaryBlue,
+    //       shape: RoundedRectangleBorder(
+    //         borderRadius: BorderRadius.circular(24),
+    //       ),
+    //     ),
+    //     child: Row(
+    //       mainAxisAlignment: MainAxisAlignment.center,
+    //       children: [
+    //         Text("Next", style: TextStyle(fontSize: 16)),
+    //         SizedBox(width: 8),
+    //         IconButton(
+    //           icon: Icon(Icons.arrow_forward),
+    //           onPressed: () {
+    //             // Save driver info using notifier
+    // final success = notifier.saveDriverInfo(
+    //   firstName: driverNameController.text,
+    //   licenseNumber: licenseNumberController.text,
+    //   yearsOfExperience: int.tryParse(experienceController.text) ?? 0,
+    // );
+
+    // // If noting filled by user, do not proceed
+    // if (!success) {
+    //   return;
+    // }
+
+    // Navigator.pushNamed(context, Routes.vehicleInformationScreen);
+    //           },
+    //         ),
+    //       ],
+    //     ),
+    //   ),
+    // );
   }
 }

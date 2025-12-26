@@ -1,11 +1,9 @@
-//
-
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:provider/provider.dart';
+import 'package:smart_truck_app/core/resources/route_manager.dart';
 import 'package:smart_truck_app/features/registration/domain/entity/user_draft.dart';
 import 'package:smart_truck_app/features/registration/presentation/controller/registration_draft_notifier.dart';
-import 'package:smart_truck_app/features/registration/presentation/pages/to_complete_profile/document_upload.dart';
 import 'package:logger/logger.dart';
 
 class VehicleInformationScreen extends StatefulWidget {
@@ -17,6 +15,38 @@ class VehicleInformationScreen extends StatefulWidget {
 }
 
 class _VehicleInformationScreenState extends State<VehicleInformationScreen> {
+  bool isFromReiviewPage = false;
+  @override
+  void initState() {
+    // Logics for prefilling forms while editing
+    final draft = context.read<RegistrationDraftNotifier>().draft;
+    vehicleTypeController = TextEditingController(
+      text: draft.vehicleType ?? '',
+    );
+    isFromReiviewPage = true;
+
+    logger.w("Vehicle Type: ${vehicleTypeController.text}");
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    vehicleTypeController.dispose();
+    super.dispose();
+  }
+
+  // To ensure init logic runs only once
+  bool _initialized = false;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_initialized) {
+      final draft = context.read<RegistrationDraftNotifier>().draft;
+      // INIT controllers only once
+      _initialized = true;
+    }
+  }
+
   final _formKey = GlobalKey<FormBuilderState>();
   var logger = Logger(printer: PrettyPrinter());
 
@@ -64,10 +94,7 @@ class _VehicleInformationScreenState extends State<VehicleInformationScreen> {
       return;
     }
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => DocumentUploadScreen()),
-    );
+    isFromReiviewPage ? Navigator.pushNamed(context, Routes.reviewPage) : Navigator.pushNamed(context, Routes.documentUploadScreen);
   }
 
   @override
@@ -141,7 +168,8 @@ class _VehicleInformationScreenState extends State<VehicleInformationScreen> {
                     name: 'vehicle_type',
                     decoration: InputDecoration(
                       hintText:
-                          "Select type (e.g., Truck, Van ${notifier.draft.firstName})",
+                          // "Select type (e.g., Truck, Van ${notifier.draft.firstName})",
+                          vehicleTypeController.text,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                         borderSide: BorderSide(color: Colors.grey[300]!),

@@ -194,7 +194,7 @@ class _DocumentUploadScreenState extends State<DocumentUploadScreen> {
     final notifier = context.read<RegistrationDraftNotifier>();
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       appBar: AppBar(
         title: Padding(
           padding: const EdgeInsets.only(top: 8.0),
